@@ -5,6 +5,7 @@
  * Date: 05.04.2019
  * Time: 7:01 PM
  */
+//Make new aufgabe falsch verstanden
 $input = file('input.txt', FILE_IGNORE_NEW_LINES);
 
 $letterArrArr = [];
@@ -20,6 +21,7 @@ for($i = 0, $iMax = count($letterArrArr); $i < $iMax; $i++){
         }
         $wrongCount = 0;
         if($solutionLetters !== ''){
+            echo $i . '  ' . $k . '    ';
             break 2;
         }
         $tmpArray = $letterArrArr[$k];
@@ -30,7 +32,6 @@ for($i = 0, $iMax = count($letterArrArr); $i < $iMax; $i++){
                 $solutionLetters .= $letterArrArr[$i][$j];
                 $tmpArray[$letterPos] = ' ';
                 $tmpArrayStr = implode('', $tmpArray);
-                continue;
             } else {
                 ++$wrongCount;
             }
@@ -41,4 +42,4 @@ for($i = 0, $iMax = count($letterArrArr); $i < $iMax; $i++){
         }
     }
 }
-echo $k;
+echo $solutionLetters;
