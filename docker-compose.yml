@@ -4,6 +4,7 @@ services:
     image: "php:7.2-apache"
     volumes:
     - "./:/var/www/html"
+    - "./test/:/usr/local/etc/php/conf.d"
     ports:
     - "80:80"
     - "443:443"

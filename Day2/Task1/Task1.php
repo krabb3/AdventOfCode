@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: lkrebs
- * Date: 22.03.2019
- * Time: 5:18 PM
+ * Date: 05.04.2019
+ * Time: 6:20 PM
  */
 $input = file('input.txt', FILE_IGNORE_NEW_LINES);
 $doubles = 0;
