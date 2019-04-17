@@ -17,7 +17,7 @@ foreach ($input as $word){
     $test1 = false;
     $test2 = false;
     for ($i = 0, $iMax = count($word); $i < $iMax; $i++){
-        ++$chars[$word[$i]][$word[$i + 1]];
+        $chars[$word[$i]][$word[$i + 1]]++;
         if($chars[$word[$i]][$word[$i + 1]] > 1){
             $test1 = true;
         }
@@ -26,7 +26,8 @@ foreach ($input as $word){
         }
     }
     if($test1 && $test2){
-        ++$count;
+        $count++;
     }
+    unset($chars);
 }
 echo $count;
