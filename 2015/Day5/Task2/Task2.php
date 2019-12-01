@@ -16,6 +16,7 @@ foreach ($input as $word){
 
     $test1 = false;
     $test2 = false;
+    unset($chars);
     for ($i = 0, $iMax = count($word); $i < $iMax; $i++){
         ++$chars[$word[$i]][$word[$i + 1]];
         if($chars[$word[$i]][$word[$i + 1]] > 1){
