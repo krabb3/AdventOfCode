@@ -7,7 +7,6 @@
  */
 
 
-//Faster Version I think
 $input = file('input.txt', FILE_IGNORE_NEW_LINES);
 $output = 0;
 $fuel = 0;
