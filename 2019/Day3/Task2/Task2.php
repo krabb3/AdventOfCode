@@ -7,35 +7,108 @@
  */
 
 
-for($x = 1; $x < 100; $x++){
-    for($y = 1; $y < 100; $y++) {
-        $input = file_get_contents('input.txt');
-        $input = explode(',', $input);
-        $input[1] = $x;
-        $input[2] = $y;
-
-        for($i = 0, $iMax = count($input); $i < $iMax; $i++){
-            $number1 = $input[$input[$i + 1]];
-            $number2 = $input[$input[$i + 2]];
-            $position = $input[$i + 3];
-            if ((int)$input[$i] === 1) {
-                $input[$position] = $number1 + $number2;
-                $i += 3;
-                continue;
+$input = file('input.txt');
+$line1 = explode(',', $input[0]);
+$line2 = explode(',', $input[1]);
+$field = [];
+$points = [];
+$x = 0;
+$y = 0;
+$steps = 0;
+foreach($line1 as $line){
+    if(strpos($line, 'L') === 0){
+        $length = substr($line, 1);
+        for($i = 0; $i < $length; $i++){
+            $x--;
+            $steps++;
+            if (!isset($field[$x][$y])) {
+                $field[$x][$y]['steps'] = $steps;
+                $field[$x][$y]++;
             }
-            if((int)$input[$i] === 2) {
-                $input[$position] = $number1 * $number2;
-                $i += 3;
-                continue;
-            }
-            break;
         }
-        if((int)$input[0] === 19690720){
-            break 2;
+    } elseif(strpos($line, 'R') === 0){
+        $length = substr($line, 1);
+        for($i = 0; $i < $length; $i++){
+            $x++;
+            $steps++;
+            if (!isset($field[$x][$y])) {
+                $field[$x][$y]['steps'] = $steps;
+                $field[$x][$y]++;
+            }
+        }
+    } elseif(strpos($line, 'U') === 0){
+        $length = substr($line, 1);
+        for($i = 0; $i < $length; $i++){
+            $y++;
+            $steps++;
+            if (!isset($field[$x][$y])) {
+                $field[$x][$y]['steps'] = $steps;
+                $field[$x][$y]++;
+            }
+        }
+    } elseif(strpos($line, 'D') === 0){
+        $length = substr($line, 1);
+        for($i = 0; $i < $length; $i++){
+            $y--;
+            $steps++;
+            if (!isset($field[$x][$y])) {
+                $field[$x][$y]['steps'] = $steps;
+                $field[$x][$y]++;
+            }
         }
     }
 }
+$x = 0;
+$y = 0;
+$steps = 0;
+foreach($line2 as $line) {
+    if (strpos($line, 'L') === 0) {
+        $length = substr($line, 1);
+        for ($i = 0; $i < $length; $i++) {
+            $x--;
+            $steps++;
+            if ($field[$x][$y]) {
+                $points[] = ['x' => $x, 'y' => $y, 'steps' => $steps + $field[$x][$y]['steps']];
+            }
+        }
+    } elseif (strpos($line, 'R') === 0) {
+        $length = substr($line, 1);
+        for ($i = 0; $i < $length; $i++) {
+            $x++;
+            $steps++;
+            if ($field[$x][$y]) {
+                $points[] = ['x' => $x, 'y' => $y, 'steps' => $steps + $field[$x][$y]['steps']];
+            }
+        }
+    } elseif (strpos($line, 'U') === 0) {
+        $length = substr($line, 1);
+        for ($i = 0; $i < $length; $i++) {
+            $y++;
+            $steps++;
+            if ($field[$x][$y]) {
+                $points[] = ['x' => $x, 'y' => $y, 'steps' => $steps + $field[$x][$y]['steps']];
+            }
+        }
+    } elseif (strpos($line, 'D') === 0) {
+        $length = substr($line, 1);
+        for ($i = 0; $i < $length; $i++) {
+            $y--;
+            $steps++;
+            if ($field[$x][$y]) {
+                $points[] = ['x' => $x, 'y' => $y, 'steps' => $steps + $field[$x][$y]['steps']];
+            }
+        }
+    }
 
-echo $input[1] * 100 + $input[2];
+}
+$shortestDistance = PHP_INT_MAX;
+foreach($points as $point){
+    $temp = $point['steps'];
+    if($temp < $shortestDistance){
+        $shortestDistance = $temp;
+    }
+}
+echo $shortestDistance;
 ?>
+
 <body style="background-color: black; color: white;"></body>
