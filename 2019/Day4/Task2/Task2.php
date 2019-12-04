@@ -5,110 +5,48 @@
  * Date: 08.04.2019
  * Time: 9:00 PM
  */
-
-
-$input = file('input.txt');
-$line1 = explode(',', $input[0]);
-$line2 = explode(',', $input[1]);
-$field = [];
-$points = [];
-$x = 0;
-$y = 0;
-$steps = 0;
-foreach($line1 as $line){
-    if(strpos($line, 'L') === 0){
-        $length = substr($line, 1);
-        for($i = 0; $i < $length; $i++){
-            $x--;
-            $steps++;
-            if (!isset($field[$x][$y])) {
-                $field[$x][$y]['steps'] = $steps;
-                $field[$x][$y]++;
-            }
+$count = 0;
+for($i = 171309; $i < 643603; $i++){
+    $numberArr = str_split((string) $i);
+    $lastChar = 0;
+    $nextChar = 0;
+    $skipNumber = false;
+    $test1 = true;
+    $test2 = false;
+    $test3 = false;
+    for($j = 0, $jMax = count($numberArr); $j < $jMax; $j++){
+        if($skipNumber === $numberArr[$j]){
+            continue;
         }
-    } elseif(strpos($line, 'R') === 0){
-        $length = substr($line, 1);
-        for($i = 0; $i < $length; $i++){
-            $x++;
-            $steps++;
-            if (!isset($field[$x][$y])) {
-                $field[$x][$y]['steps'] = $steps;
-                $field[$x][$y]++;
-            }
+        $skipNumber = false;
+        if($j === count($numberArr) -1 ){
+            $nextChar = 0;
+        } else {
+            $nextChar = (int)$numberArr[$j + 1];
         }
-    } elseif(strpos($line, 'U') === 0){
-        $length = substr($line, 1);
-        for($i = 0; $i < $length; $i++){
-            $y++;
-            $steps++;
-            if (!isset($field[$x][$y])) {
-                $field[$x][$y]['steps'] = $steps;
-                $field[$x][$y]++;
-            }
+        if($j === 0){
+            $lastChar = 0;
+        } else {
+            $lastChar = (int)$numberArr[$j - 1];
         }
-    } elseif(strpos($line, 'D') === 0){
-        $length = substr($line, 1);
-        for($i = 0; $i < $length; $i++){
-            $y--;
-            $steps++;
-            if (!isset($field[$x][$y])) {
-                $field[$x][$y]['steps'] = $steps;
-                $field[$x][$y]++;
+        if($lastChar > (int)$numberArr[$j]){
+            $test1 = false;
+            break;
+        }
+        if((int)$numberArr[$j] === $lastChar){
+            $test2 = true;
+            if((int)$numberArr[$j] === $nextChar){
+                $skipNumber = $numberArr[$j];
+            } else {
+                $test3 = true;
             }
         }
     }
-}
-$x = 0;
-$y = 0;
-$steps = 0;
-foreach($line2 as $line) {
-    if (strpos($line, 'L') === 0) {
-        $length = substr($line, 1);
-        for ($i = 0; $i < $length; $i++) {
-            $x--;
-            $steps++;
-            if ($field[$x][$y]) {
-                $points[] = ['x' => $x, 'y' => $y, 'steps' => $steps + $field[$x][$y]['steps']];
-            }
-        }
-    } elseif (strpos($line, 'R') === 0) {
-        $length = substr($line, 1);
-        for ($i = 0; $i < $length; $i++) {
-            $x++;
-            $steps++;
-            if ($field[$x][$y]) {
-                $points[] = ['x' => $x, 'y' => $y, 'steps' => $steps + $field[$x][$y]['steps']];
-            }
-        }
-    } elseif (strpos($line, 'U') === 0) {
-        $length = substr($line, 1);
-        for ($i = 0; $i < $length; $i++) {
-            $y++;
-            $steps++;
-            if ($field[$x][$y]) {
-                $points[] = ['x' => $x, 'y' => $y, 'steps' => $steps + $field[$x][$y]['steps']];
-            }
-        }
-    } elseif (strpos($line, 'D') === 0) {
-        $length = substr($line, 1);
-        for ($i = 0; $i < $length; $i++) {
-            $y--;
-            $steps++;
-            if ($field[$x][$y]) {
-                $points[] = ['x' => $x, 'y' => $y, 'steps' => $steps + $field[$x][$y]['steps']];
-            }
-        }
-    }
-
-}
-$shortestDistance = PHP_INT_MAX;
-foreach($points as $point){
-    $temp = $point['steps'];
-    if($temp < $shortestDistance){
-        $shortestDistance = $temp;
+    if($test1 && $test2 && $test3){
+        $count++;
     }
 }
-echo $shortestDistance;
+echo $count;
 ?>
 
 <body style="background-color: black; color: white;"></body>
