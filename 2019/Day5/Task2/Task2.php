@@ -7,35 +7,104 @@
  */
 
 
-for($x = 1; $x < 100; $x++){
-    for($y = 1; $y < 100; $y++) {
-        $input = file_get_contents('input.txt');
-        $input = explode(',', $input);
-        $input[1] = $x;
-        $input[2] = $y;
-
-        for($i = 0, $iMax = count($input); $i < $iMax; $i++){
-            $number1 = $input[$input[$i + 1]];
-            $number2 = $input[$input[$i + 2]];
-            $position = $input[$i + 3];
-            if ((int)$input[$i] === 1) {
-                $input[$position] = $number1 + $number2;
-                $i += 3;
-                continue;
-            }
-            if((int)$input[$i] === 2) {
-                $input[$position] = $number1 * $number2;
-                $i += 3;
-                continue;
-            }
-            break;
-        }
-        if((int)$input[0] === 19690720){
-            break 2;
-        }
+$input = file_get_contents('input.txt');
+$input = explode(',', $input);
+$id = 5;
+for ($i = 0, $iMax = count($input); $i < $iMax; $i++) {
+    $code = $input[$i];
+    $codeArr = str_split((string)$code);
+    $codeArrSize = count($codeArr);
+    if ($codeArrSize === 1) {
+        $opCode = (int)$codeArr[0];
+        $firstParam = 0;
+        $secondParam = 0;
+    } elseif ($codeArrSize === 2) {
+        $opCode = (int)($codeArr[$codeArrSize - 2] . $codeArr[$codeArrSize - 1]);
+        $firstParam = 0;
+        $secondParam = 0;
+    } elseif ($codeArrSize === 3) {
+        $opCode = (int)($codeArr[$codeArrSize - 2] . $codeArr[$codeArrSize - 1]);
+        $firstParam = (int)$codeArr[$codeArrSize - 3];
+        $secondParam = 0;
+    } elseif ($codeArrSize === 4) {
+        $opCode = (int)($codeArr[$codeArrSize - 2] . $codeArr[$codeArrSize - 1]);
+        $firstParam = (int)$codeArr[$codeArrSize - 3];
+        $secondParam = (int)$codeArr[$codeArrSize - 4];
     }
+    if ($codeArrSize > 4) {
+        $thirdParam = (int)$codeArr[$codeArrSize - 5];
+    } else {
+        $thirdParam = 0;
+    }
+    if ($firstParam === 1) {
+        $number1 = $input[$i + 1];
+    } else {
+        $number1 = $input[$input[$i + 1] ?? null] ?? null;
+    }
+    if ($secondParam === 1) {
+        $number2 = $input[$i + 2];
+    } else {
+        $number2 = $input[$input[$i + 2] ?? null] ?? null;
+    }
+    $position = $input[$i + 3] ?? null;
+    if ($opCode === 1) {
+        $input[$position] = $number1 + $number2;
+        $i += 3;
+        continue;
+    }
+    if ($opCode === 2) {
+        $input[$position] = $number1 * $number2;
+        $i += 3;
+        continue;
+    }
+    if ($opCode === 3) {
+        $position = $input[$i + 1];
+        $input[$position] = $id;
+        ++$i;
+        continue;
+    }
+    if ($opCode === 4) {
+        $position = $input[$input[$i + 1]];
+        echo $position, '<br />';
+        ++$i;
+        continue;
+    }
+    if ($opCode === 5){
+        if((int)$number1 !== 0){
+            $i = (int)$number2 - 1;
+        } else {
+            $i += 2;
+        }
+        continue;
+    }
+    if ($opCode === 6){
+        if((int)$number1 === 0){
+            $i = (int)$number2 - 1;
+        } else {
+            $i += 2;
+        }
+        continue;
+    }
+    if($opCode === 7){
+        if ((int)$number1 < (int)$number2) {
+            $input[$position] = 1;
+        } else {
+            $input[$position] = 0;
+        }
+        $i += 3;
+        continue;
+    }
+    if($opCode === 8){
+        if ((int)$number1 === (int)$number2) {
+            $input[$position] = 1;
+        } else {
+            $input[$position] = 0;
+        }
+        $i += 3;
+        continue;
+    }
+    break;
 }
-
-echo $input[1] * 100 + $input[2];
+//echo $input[0];
 ?>
 <body style="background-color: black; color: white;"></body>
